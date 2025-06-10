@@ -1,8 +1,19 @@
-m = [[1] * 5 for _ in range(4)]
-m[0][1] = 2
-m[1][2] = 2
+class PiggyBank:
+    def __init__(self, coins):
+        self.coins = coins
 
-for i in m:
-    for j in i:
-        print(j, end=' ')
-    print()
+    def __repr__(self):
+        return f'PiggyBank({self.coins})'
+
+    def __add__(self, other):
+        return PiggyBank(self.coins + other)
+
+    def __radd__(self, other):
+        print('Вызов метода __radd__()')
+        return self.__add__(other)
+
+
+bank = PiggyBank(10)
+num = 5
+
+print(num.__add__(bank))
