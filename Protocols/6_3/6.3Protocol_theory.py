@@ -1,14 +1,22 @@
-class ForgivingIndexer:
-    def __init__(self, sequence):
-        self.sequence = sequence
 
-    def __getitem__(self, index):
-        return self.sequence[int(index)]
+def parse_file_number():
+    flag_script = False
+    res = {}
+    with open(r'F:\python\9208863050.vxml', 'rt', encoding='UTF-8') as number:
+        for row in number:
+            if '<script>' in row:
+                print('hi')
+                flag_script = True
+            if '</script>' in row:
+                flag_script = False
+            if flag_script and '=' in row:
+                key, val = row.strip().split('=', 1)
+                res[key.strip()] = val.strip()
+    return res
 
-    def __len__(self):
-        return len(self.sequence)
+
+n = parse_file_number()
 
 
-words = ForgivingIndexer(['beegeek', 'pygen', 'stepik', 'python'])
-
-print(len(words[1.9]))
+for k,v in n.items():
+    print(f'{k} : {v}')
