@@ -8,13 +8,36 @@
 # Примечание 1. В тестирующую систему сдайте программу, содержащую только необходимую функцию pluck(), но не код, вызывающий ее.
 
 
+# def pluck(data:dict, path:str, default=None):
+#     path = path.split('.')
+#     if len(path) < 2:
+#         return data.setdefault(path[0], default)
+#     if path[0] in data:
+#         res = pluck(data[path[0]], '.'.join(path[1:]), default)
+#         return res
+
+
+# другое решение
+def pluck(data, path, default=None):
+    for key in path.split('.'):
+        if isinstance(data, dict) and key in data:
+            data = data[key]
+        else:
+            return default
+    return data
 
 
 
+d = {'a': {'b': 5, 'z': 20}, 'c': {'d': 3}, 'x': 40}
 
+print(pluck(d, 'x'))
 
+d = {'a': {'b': 5, 'z': 20}, 'c': {'d': 3}, 'x': 40}
 
+print(pluck(d, 'a.b'))
 
+d = {'a': {'b': {'c': {'d': {'e': 4}}}}}
 
+print(pluck(d, 'a.b.c'))
 
 
