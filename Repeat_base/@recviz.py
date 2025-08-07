@@ -9,19 +9,73 @@
 # Примечание 3. В тестирующую систему сдайте программу, содержащую только необходимый декоратор @recviz, но не код, вызывающий его.
 
 
+import functools
 
 
+def recviz(func):
+    level = -1
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        nonlocal level
+        level += 1
+
+        pos_args = list(map(repr, args))
+        keyword_args = [f'{k}={v!r}' for k, v in kwargs.items()]
+
+        print('    ' * level + '->', f'{func.__name__}({", ".join(pos_args + keyword_args)})')
+        value = func(*args, **kwargs)
+        print('    ' * level + '<-', repr(value))
+
+        level -= 1
+        return value
+
+    return wrapper
 
 
+# test 1
+print()
+
+@recviz
+def add(a, b):
+    return a + b
+
+add(1, b=2)
 
 
+# test 2
+print()
+
+@recviz
+def add(a, b, c, d, e):
+    return (a + b + c) * (d + e)
+
+add('a', b='b', c='c', d=3, e=True)
+
+# test 3
+print()
 
 
+@recviz
+def fib(n):
+    if n <= 2:
+        return 1
+    else:
+        return fib(n - 1) + fib(n - 2)
 
 
+fib(4)
+
+# test 4
+print()
+
+@recviz
+def fact(n):
+    if n == 0:
+        return 1
+    else:
+        return n * fact(n - 1)
 
 
-
-
-
+fact(5)
 
